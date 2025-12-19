@@ -1,0 +1,265 @@
+/* --- VARIABLES --- */
+:root {
+    --primary-color: #0f3460; /* Navy Blue from Logo */
+    --accent-color: #e94560;  /* Orange/Red from Logo */
+    --dark-bg: #1a1a2e;
+    --light-bg: #f3f4f6;
+    --text-color: #333;
+    --white: #ffffff;
+    --transition: all 0.3s ease;
+}
+
+/* --- RESET --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- NAVIGATION --- */
+.navbar {
+    background: var(--white);
+    height: 80px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+/* LOGO FIX - Ensures it's not too big */
+.brand-logo {
+    height: 90px;       /* Fixed height */
+    width: auto;        /* Maintain aspect ratio */
+    padding: 5px 0;     /* Breathing room */
+    object-fit: contain;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    align-items: center;
+}
+
+.nav-links li {
+    margin-left: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.nav-links a:hover {
+    color: var(--accent-color);
+}
+
+.btn-nav {
+    background: var(--accent-color);
+    color: var(--white) !important;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.btn-nav:hover {
+    background: #c0354a;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+/* --- HERO SECTION --- */
+.hero-section {
+    background: linear-gradient(rgba(15, 52, 96, 0.9), rgba(15, 52, 96, 0.95)), 
+                url('https://source.unsplash.com/random/1920x1080/?technology');
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    color: var(--white);
+    padding-top: 80px; /* Offset fixed nav */
+}
+
+.hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.hero-text {
+    flex: 1;
+}
+
+.hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-image img {
+    max-width: 100%;
+    border-radius: 10px;
+    display: none; /* Hidden on small screens by default logic, shown in desktop */
+}
+@media(min-width: 768px) {
+    .hero-image img { display: block; }
+}
+
+.hero-text h1 {
+    font-size: 3.5rem;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.highlight {
+    color: var(--accent-color);
+}
+
+.tagline {
+    color: var(--accent-color);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* --- BUTTONS --- */
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 15px;
+    margin-top: 20px;
+    transition: var(--transition);
+}
+
+.btn-primary {
+    background: var(--accent-color);
+    color: var(--white);
+}
+
+.btn-secondary {
+    border: 2px solid var(--white);
+    color: var(--white);
+}
+
+.btn-primary:hover { background: #c0354a; transform: translateY(-3px); }
+.btn-secondary:hover { background: var(--white); color: var(--primary-color); transform: translateY(-3px); }
+
+/* --- SERVICES --- */
+.section-padding { padding: 80px 0; }
+.section-header { text-align: center; margin-bottom: 60px; }
+.section-header h2 { font-size: 2.5rem; color: var(--primary-color); }
+.underline { width: 80px; height: 4px; background: var(--accent-color); margin: 10px auto; }
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.service-card {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    text-align: center;
+    transition: var(--transition);
+    border-top: 4px solid transparent;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent-color);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.icon-box {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+/* --- CONTACT --- */
+.bg-light { background: var(--light-bg); }
+.contact-wrapper { display: flex; flex-wrap: wrap; gap: 50px; }
+.contact-info { flex: 1; min-width: 300px; }
+.contact-form-box { flex: 1; min-width: 300px; background: var(--white); padding: 40px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+
+.info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.info-item i {
+    color: var(--accent-color);
+    margin-right: 15px;
+    font-size: 1.2rem;
+}
+
+.input-group { margin-bottom: 20px; }
+.input-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+.input-group input, .input-group select, .input-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+.full-width { width: 100%; border: none; cursor: pointer; }
+
+/* --- FOOTER --- */
+footer { background: #111; color: #aaa; padding: 40px 0; text-align: center; }
+.social-links { margin-top: 20px; }
+.social-links a { color: #aaa; margin: 0 10px; font-size: 1.5rem; transition: var(--transition); }
+.social-links a:hover { color: var(--accent-color); }
+
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none; /* JS will toggle this */
+        position: absolute;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background: var(--white);
+        flex-direction: column;
+        padding: 20px 0;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+    .nav-links.active { display: flex; }
+    .nav-links li { margin: 15px 0; }
+    .menu-toggle { display: block; }
+    .hero-text h1 { font-size: 2.5rem; }
+    .hero-content { flex-direction: column; text-align: center; }
+    .hero-btns { justify-content: center; }
+}
