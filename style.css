@@ -48,7 +48,7 @@ body {
 
 /* LOGO FIX - Ensures it's not too big */
 .brand-logo {
-    height: 90px;       /* Fixed height */
+    height: 70px;       /* Fixed height */
     width: auto;        /* Maintain aspect ratio */
     padding: 5px 0;     /* Breathing room */
     object-fit: contain;

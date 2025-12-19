@@ -36,35 +36,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- 3. DYNAMIC FORM HANDLING (Frontend Simulation) ---
-    const contactForm = document.getElementById('contactForm');
+   
+const form = document.getElementById('contactForm');
+const submitBtn = form.querySelector('button[type="submit"]');
 
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault(); // Stop page reload
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-            // Get values
-            const name = document.getElementById('name').value;
-            const service = document.getElementById('service').value;
+    const formData = new FormData(form);
+    formData.append("access_key", "1b8515e6-436f-4f44-a5a0-75f2dad58fec");
 
-            // Simple validation simulation
-            if(name && service) {
-                // Simulate sending data to backend
-                const btn = this.querySelector('button');
-                const originalText = btn.innerText;
-                
-                btn.innerText = 'Sending...';
-                btn.style.opacity = '0.7';
+    const originalText = submitBtn.textContent;
 
-                setTimeout(() => {
-                    alert(`Thank you, ${name}! We have received your request for ${service}. We will contact you shortly.`);
-                    contactForm.reset(); // Clear form
-                    btn.innerText = originalText;
-                    btn.style.opacity = '1';
-                }, 1500); // Fake delay of 1.5 seconds
-            }
+    submitBtn.textContent = "Sending...";
+    submitBtn.disabled = true;
+
+    try {
+        const response = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            body: formData
         });
-    }
 
+        const data = await response.json();
+
+        if (response.ok) {
+            alert("Success! Your message has been sent.");
+            form.reset();
+        } else {
+            alert("Error: " + data.message);
+        }
+
+    } catch (error) {
+        alert("Something went wrong. Please try again.");
+    } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
+});
     // --- 4. STICKY NAVBAR SHADOW ON SCROLL ---
     window.addEventListener('scroll', () => {
         const navbar = document.getElementById('navbar');
