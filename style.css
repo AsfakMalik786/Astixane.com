@@ -1,3 +1,29 @@
+/* Responsive Design Adjustments */
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+    .hero-content h1 {
+        font-size: 24px;
+    }
+    .cta-buttons {
+        flex-direction: column;
+        margin-top: 20px;
+    }
+    .services {
+        padding: 20px;
+    }
+}
+
+/* Tablet Styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .hero {
+        padding: 40px;
+    }
+}
 * {
     margin: 0;
     padding: 0;
