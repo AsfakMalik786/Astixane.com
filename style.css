@@ -531,6 +531,48 @@ footer {
     color: #b0b8d4;
 }
 
+.footer-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+}
+
+.social-icons a {
+    color: #b0b8d4;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.02);
+}
+
+.social-icons a svg {
+    width: 20px;
+    height: 20px;
+}
+
+.social-icons img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.social-icons a:hover {
+    transform: translateY(-4px);
+    color: #fff;
+    background: linear-gradient(135deg, #2196F3, #FF6B35);
+}
+
 @media (max-width: 768px) {
     .hero h1 {
         font-size: 42px;

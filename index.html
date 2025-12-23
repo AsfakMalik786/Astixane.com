@@ -143,34 +143,45 @@
             </div>
 
             <div class="contact-form">
-                <form>
-                    <div class="form-row">
-                        <input type="text" placeholder="Name" required>
-                        <input type="email" placeholder="Email" required>
-                    </div>
-                    <select required>
-                        <option value="">Select Service</option>
-                        <option value="web">Web Development</option>
-                        <option value="app">App Development</option>
-                        <option value="ui">UI/UX Design</option>
-                        <option value="security">Security & Analysis</option>
-                        <option value="consulting">Consultancy</option>
-                        <option value="analytics">Data Analytics</option>
-                        <option value="ai">AI/ML Integration</option>
-                        <option value="scraping">Web Scraping</option>
-                        <option value="data">Data Engineering</option>
-                        <option value="cloud">Cloud Solutions</option>
-                    </select>
-                    <textarea placeholder="Message" rows="5" required></textarea>
-                    <button type="submit" class="btn btn-primary">Send Message</button>
-                </form>
+                        <form action="https://api.web3forms.com/submit" method="POST" id="contactForm">
+                            <input type="hidden" name="access_key" value="c278a9cd-ebec-4344-b448-557cbda6a306">
+                            <div class="form-row">
+                                <input type="text" name="name" placeholder="Name" required>
+                                <input type="email" name="email" placeholder="Email" required>
+                            </div>
+                            <select name="service" required>
+                                <option value="">Select Service</option>
+                                <option value="web">Web Development</option>
+                                <option value="app">App Development</option>
+                                <option value="ui">UI/UX Design</option>
+                                <option value="security">Security & Analysis</option>
+                                <option value="consulting">Consultancy</option>
+                                <option value="analytics">Data Analytics</option>
+                                <option value="ai">AI/ML Integration</option>
+                                <option value="scraping">Web Scraping</option>
+                                <option value="data">Data Engineering</option>
+                                <option value="cloud">Cloud Solutions</option>
+                            </select>
+                            <textarea name="message" placeholder="Message" rows="5" required></textarea>
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </form>
             </div>
         </div>
     </section>
 
-    <footer>
-        <p>&copy; 2025 Astixane Technologies. All Rights Reserved.</p>
-    </footer>
+            <footer>
+                <div class="footer-inner">
+                    <div class="social-icons">
+                        <a href="https://www.instagram.com/astixane_technologies?igsh=MXE1MWp0dXFrcHlvOQ==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                            <img src="assets/instagram.png" alt="Instagram">
+                        </a>
+                        <a href="https://www.linkedin.com/in/astixane-technologies-12787839b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                            <img src="assets/linkedin.png" alt="LinkedIn">
+                        </a>
+                    </div>
+                    <p>&copy; 2025 Astixane Technologies. All Rights Reserved.</p>
+                </div>
+            </footer>
 
     <script src="script.js"></script>
 </body>
