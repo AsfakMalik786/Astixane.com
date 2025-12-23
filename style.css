@@ -62,6 +62,14 @@ nav {
     background-clip: text;
 }
 
+/* Hide the mobile nav toggle by default (only show via media query) */
+.nav-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
 .nav-links {
     display: flex;
     gap: 40px;
@@ -97,7 +105,7 @@ nav {
 
 /* Hero Section */
 .hero {
-    height: 100vh;
+    height: 75vh;
     display: flex;
     align-items: center;
     justify-content: center;
