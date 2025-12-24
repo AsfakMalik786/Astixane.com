@@ -184,5 +184,17 @@
             </footer>
 
     <script src="script.js"></script>
+    <!-- Chat widget -->
+    <div id="chat-widget" class="chat-widget">
+        <div id="chat-toggle" class="chat-toggle" aria-label="Open chat">💬</div>
+        <div id="chat-panel" class="chat-panel" aria-hidden="true">
+            <div class="chat-header">Chat with us <button id="chat-close" class="chat-close" aria-label="Close chat">✕</button></div>
+            <div id="chat-log" class="chat-log" role="log" aria-live="polite"></div>
+            <div class="chat-input-row">
+                <input id="chat-input" class="chat-input" placeholder="Ask about services, contact, pricing..." aria-label="Chat input" />
+                <button id="chat-send" class="chat-send">Send</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
