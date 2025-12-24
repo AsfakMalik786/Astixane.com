@@ -679,10 +679,8 @@ footer {
     position: fixed;
     right: 20px;
     bottom: 20px;
-    z-index: 2000;
+    z-index: 9999;
     font-family: inherit;
-}
-.chat-widget {
     will-change: transform;
     transition: transform 0.12s cubic-bezier(.2,.8,.2,1);
     touch-action: none;
@@ -702,7 +700,10 @@ footer {
     overflow: hidden;
     touch-action: none;
     position: relative;
-    z-index: 1200;
+    z-index: 9999;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 .chat-toggle img {
     width: 34px;

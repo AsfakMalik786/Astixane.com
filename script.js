@@ -288,6 +288,57 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('chatWidgetPos', JSON.stringify({ left: Math.round(currentLeft), top: Math.round(currentTop) }));
             setTimeout(() => { isDragging = false; }, 50);
         }, { passive: false });
+
+        // Mouse event fallback for desktop browsers
+        let isMouseDown = false;
+        chatToggle.addEventListener('mousedown', function (e) {
+            if (e.button !== 0) return; // only left click
+            e.preventDefault();
+            isMouseDown = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            const rect = chatWidget.getBoundingClientRect();
+            baseLeft = rect.left;
+            baseTop = rect.top;
+            chatWidget.style.left = baseLeft + 'px';
+            chatWidget.style.top = baseTop + 'px';
+            chatWidget.style.right = 'auto';
+            chatWidget.style.bottom = 'auto';
+            startLeft = baseLeft;
+            startTop = baseTop;
+            targetLeft = startLeft;
+            targetTop = startTop;
+            currentLeft = startLeft;
+            currentTop = startTop;
+            chatWidget.classList.add('dragging');
+            isDragging = false;
+            if (!rafId) animate();
+        });
+
+        window.addEventListener('mousemove', function (e) {
+            if (!isMouseDown) return;
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+            if (Math.abs(dx) > 4 || Math.abs(dy) > 4) isDragging = true;
+            const widgetW = chatWidget.offsetWidth;
+            const widgetH = chatWidget.offsetHeight;
+            targetLeft = clamp(startLeft + dx, 0, window.innerWidth - widgetW);
+            targetTop = clamp(startTop + dy, 0, window.innerHeight - widgetH);
+        });
+
+        window.addEventListener('mouseup', function (e) {
+            if (!isMouseDown) return;
+            isMouseDown = false;
+            chatWidget.classList.remove('dragging');
+            if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+            currentLeft = targetLeft;
+            currentTop = targetTop;
+            chatWidget.style.transform = 'none';
+            chatWidget.style.left = Math.round(currentLeft) + 'px';
+            chatWidget.style.top = Math.round(currentTop) + 'px';
+            localStorage.setItem('chatWidgetPos', JSON.stringify({ left: Math.round(currentLeft), top: Math.round(currentTop) }));
+            setTimeout(() => { isDragging = false; }, 50);
+        });
     }
 
     if (chatClose) chatClose.addEventListener('click', () => chatPanel.setAttribute('aria-hidden','true'));
