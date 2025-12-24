@@ -199,8 +199,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (Math.abs(dx) > 4 || Math.abs(dy) > 4) isDragging = true;
             const widgetW = chatWidget.offsetWidth;
             const widgetH = chatWidget.offsetHeight;
-            targetLeft = clamp(startLeft + dx, 8, window.innerWidth - widgetW - 8);
-            targetTop = clamp(startTop + dy, 8, window.innerHeight - widgetH - 8);
+            // allow full-viewport movement (no edge padding)
+            targetLeft = clamp(startLeft + dx, 0, window.innerWidth - widgetW);
+            targetTop = clamp(startTop + dy, 0, window.innerHeight - widgetH);
         });
 
         window.addEventListener('pointerup', (e) => {

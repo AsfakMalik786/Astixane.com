@@ -701,6 +701,8 @@ footer {
     border: none;
     overflow: hidden;
     touch-action: none;
+    position: relative;
+    z-index: 1200;
 }
 .chat-toggle img {
     width: 34px;
