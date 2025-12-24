@@ -122,9 +122,76 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (chatToggle && chatPanel) {
-        chatToggle.addEventListener('click', () => {
+        let isDragging = false;
+        // click toggles only when not dragging
+        chatToggle.addEventListener('click', (ev) => {
+            if (isDragging) return;
             const open = chatPanel.getAttribute('aria-hidden') === 'false';
             chatPanel.setAttribute('aria-hidden', open ? 'true' : 'false');
+        });
+
+        // draggable behavior (pointer events)
+        const chatWidget = document.querySelector('.chat-widget');
+        let pointerId = null;
+        let startX = 0, startY = 0, startLeft = 0, startTop = 0;
+
+        // apply saved position
+        const saved = localStorage.getItem('chatWidgetPos');
+        if (saved && chatWidget) {
+            try {
+                const pos = JSON.parse(saved);
+                if (typeof pos.left === 'number' && typeof pos.top === 'number') {
+                    chatWidget.style.left = pos.left + 'px';
+                    chatWidget.style.top = pos.top + 'px';
+                    chatWidget.style.right = 'auto';
+                    chatWidget.style.bottom = 'auto';
+                }
+            } catch (e) {}
+        }
+
+        function clamp(v, a, b) { return Math.min(Math.max(v, a), b); }
+
+        chatToggle.addEventListener('pointerdown', (e) => {
+            // only primary button
+            if (e.button && e.button !== 0) return;
+            pointerId = e.pointerId;
+            startX = e.clientX;
+            startY = e.clientY;
+            const rect = chatWidget.getBoundingClientRect();
+            startLeft = rect.left;
+            startTop = rect.top;
+            chatWidget.classList.add('dragging');
+            chatToggle.setPointerCapture(pointerId);
+            isDragging = false;
+        });
+
+        window.addEventListener('pointermove', (e) => {
+            if (pointerId === null || e.pointerId !== pointerId) return;
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+            if (Math.abs(dx) > 4 || Math.abs(dy) > 4) isDragging = true;
+            const widgetW = chatWidget.offsetWidth;
+            const widgetH = chatWidget.offsetHeight;
+            const left = clamp(startLeft + dx, 8, window.innerWidth - widgetW - 8);
+            const top = clamp(startTop + dy, 8, window.innerHeight - widgetH - 8);
+            chatWidget.style.left = left + 'px';
+            chatWidget.style.top = top + 'px';
+            chatWidget.style.right = 'auto';
+            chatWidget.style.bottom = 'auto';
+        });
+
+        window.addEventListener('pointerup', (e) => {
+            if (pointerId === null || e.pointerId !== pointerId) return;
+            try { chatToggle.releasePointerCapture(pointerId); } catch (err) {}
+            pointerId = null;
+            chatWidget.classList.remove('dragging');
+            // save position
+            const rect = chatWidget.getBoundingClientRect();
+            const left = rect.left;
+            const top = rect.top;
+            localStorage.setItem('chatWidgetPos', JSON.stringify({ left: Math.round(left), top: Math.round(top) }));
+            // small delay so click isn't suppressed too long
+            setTimeout(() => { isDragging = false; }, 50);
         });
     }
 

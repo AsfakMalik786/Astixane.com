@@ -692,9 +692,16 @@ footer {
     align-items: center;
     justify-content: center;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    cursor: pointer;
+    cursor: grab;
     border: none;
-    font-size: 22px;
+    overflow: hidden;
+    touch-action: none;
+}
+.chat-toggle img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    pointer-events: none;
 }
 .chat-panel {
     width: 320px;
@@ -717,6 +724,7 @@ footer {
     opacity: 1;
     visibility: visible;
 }
+.chat-widget.dragging .chat-toggle { cursor: grabbing; }
 .chat-header {
     padding: 12px 14px;
     font-weight: 600;
