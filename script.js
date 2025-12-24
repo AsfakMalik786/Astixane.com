@@ -223,6 +223,71 @@ document.addEventListener('DOMContentLoaded', () => {
             // small delay so click isn't suppressed too long
             setTimeout(() => { isDragging = false; }, 50);
         });
+        // Touch fallback for devices/browsers without pointer events
+        let touchId = null;
+        chatToggle.addEventListener('touchstart', function (e) {
+            if (!e.changedTouches || e.changedTouches.length === 0) return;
+            e.preventDefault();
+            const t = e.changedTouches[0];
+            touchId = t.identifier;
+            startX = t.clientX;
+            startY = t.clientY;
+            const rect = chatWidget.getBoundingClientRect();
+            baseLeft = rect.left;
+            baseTop = rect.top;
+            chatWidget.style.left = baseLeft + 'px';
+            chatWidget.style.top = baseTop + 'px';
+            chatWidget.style.right = 'auto';
+            chatWidget.style.bottom = 'auto';
+            startLeft = baseLeft;
+            startTop = baseTop;
+            targetLeft = startLeft;
+            targetTop = startTop;
+            currentLeft = startLeft;
+            currentTop = startTop;
+            chatWidget.classList.add('dragging');
+            isDragging = false;
+            if (!rafId) animate();
+        }, { passive: false });
+
+        window.addEventListener('touchmove', function (e) {
+            if (touchId === null) return;
+            // find the touch with our id
+            let t = null;
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                if (e.changedTouches[i].identifier === touchId) { t = e.changedTouches[i]; break; }
+            }
+            if (!t && e.touches && e.touches.length) t = e.touches[0];
+            if (!t) return;
+            e.preventDefault();
+            const dx = t.clientX - startX;
+            const dy = t.clientY - startY;
+            if (Math.abs(dx) > 4 || Math.abs(dy) > 4) isDragging = true;
+            const widgetW = chatWidget.offsetWidth;
+            const widgetH = chatWidget.offsetHeight;
+            targetLeft = clamp(startLeft + dx, 0, window.innerWidth - widgetW);
+            targetTop = clamp(startTop + dy, 0, window.innerHeight - widgetH);
+        }, { passive: false });
+
+        window.addEventListener('touchend', function (e) {
+            if (touchId === null) return;
+            // check if our touch ended
+            let ended = false;
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                if (e.changedTouches[i].identifier === touchId) { ended = true; break; }
+            }
+            if (!ended) return;
+            touchId = null;
+            chatWidget.classList.remove('dragging');
+            if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+            currentLeft = targetLeft;
+            currentTop = targetTop;
+            chatWidget.style.transform = 'none';
+            chatWidget.style.left = Math.round(currentLeft) + 'px';
+            chatWidget.style.top = Math.round(currentTop) + 'px';
+            localStorage.setItem('chatWidgetPos', JSON.stringify({ left: Math.round(currentLeft), top: Math.round(currentTop) }));
+            setTimeout(() => { isDragging = false; }, 50);
+        }, { passive: false });
     }
 
     if (chatClose) chatClose.addEventListener('click', () => chatPanel.setAttribute('aria-hidden','true'));
