@@ -130,12 +130,15 @@ document.addEventListener('DOMContentLoaded', () => {
             chatPanel.setAttribute('aria-hidden', open ? 'true' : 'false');
         });
 
-        // draggable behavior (pointer events)
+        // draggable behavior (pointer events) with smooth transform animation
         const chatWidget = document.querySelector('.chat-widget');
         let pointerId = null;
         let startX = 0, startY = 0, startLeft = 0, startTop = 0;
+        let targetLeft = 0, targetTop = 0, currentLeft = 0, currentTop = 0;
+        let baseLeft = 0, baseTop = 0;
+        let rafId = null;
 
-        // apply saved position
+        // apply saved position (left/top absolute)
         const saved = localStorage.getItem('chatWidgetPos');
         if (saved && chatWidget) {
             try {
@@ -151,6 +154,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function clamp(v, a, b) { return Math.min(Math.max(v, a), b); }
 
+        function animate() {
+            // lerp current towards target
+            currentLeft += (targetLeft - currentLeft) * 0.22;
+            currentTop += (targetTop - currentTop) * 0.22;
+            const tx = Math.round(currentLeft - baseLeft);
+            const ty = Math.round(currentTop - baseTop);
+            chatWidget.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+            rafId = requestAnimationFrame(animate);
+        }
+
         chatToggle.addEventListener('pointerdown', (e) => {
             // only primary button
             if (e.button && e.button !== 0) return;
@@ -158,11 +171,25 @@ document.addEventListener('DOMContentLoaded', () => {
             startX = e.clientX;
             startY = e.clientY;
             const rect = chatWidget.getBoundingClientRect();
-            startLeft = rect.left;
-            startTop = rect.top;
+            // anchor widget to absolute left/top to use transform offsets
+            baseLeft = rect.left;
+            baseTop = rect.top;
+            // freeze absolute position
+            chatWidget.style.left = baseLeft + 'px';
+            chatWidget.style.top = baseTop + 'px';
+            chatWidget.style.right = 'auto';
+            chatWidget.style.bottom = 'auto';
+            // initial targets
+            startLeft = baseLeft;
+            startTop = baseTop;
+            targetLeft = startLeft;
+            targetTop = startTop;
+            currentLeft = startLeft;
+            currentTop = startTop;
             chatWidget.classList.add('dragging');
             chatToggle.setPointerCapture(pointerId);
             isDragging = false;
+            if (!rafId) animate();
         });
 
         window.addEventListener('pointermove', (e) => {
@@ -172,12 +199,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (Math.abs(dx) > 4 || Math.abs(dy) > 4) isDragging = true;
             const widgetW = chatWidget.offsetWidth;
             const widgetH = chatWidget.offsetHeight;
-            const left = clamp(startLeft + dx, 8, window.innerWidth - widgetW - 8);
-            const top = clamp(startTop + dy, 8, window.innerHeight - widgetH - 8);
-            chatWidget.style.left = left + 'px';
-            chatWidget.style.top = top + 'px';
-            chatWidget.style.right = 'auto';
-            chatWidget.style.bottom = 'auto';
+            targetLeft = clamp(startLeft + dx, 8, window.innerWidth - widgetW - 8);
+            targetTop = clamp(startTop + dy, 8, window.innerHeight - widgetH - 8);
         });
 
         window.addEventListener('pointerup', (e) => {
@@ -185,11 +208,17 @@ document.addEventListener('DOMContentLoaded', () => {
             try { chatToggle.releasePointerCapture(pointerId); } catch (err) {}
             pointerId = null;
             chatWidget.classList.remove('dragging');
+            // stop animation
+            if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+            // apply final placement
+            // snap current towards target for final position
+            currentLeft = targetLeft;
+            currentTop = targetTop;
+            chatWidget.style.transform = 'none';
+            chatWidget.style.left = Math.round(currentLeft) + 'px';
+            chatWidget.style.top = Math.round(currentTop) + 'px';
             // save position
-            const rect = chatWidget.getBoundingClientRect();
-            const left = rect.left;
-            const top = rect.top;
-            localStorage.setItem('chatWidgetPos', JSON.stringify({ left: Math.round(left), top: Math.round(top) }));
+            localStorage.setItem('chatWidgetPos', JSON.stringify({ left: Math.round(currentLeft), top: Math.round(currentTop) }));
             // small delay so click isn't suppressed too long
             setTimeout(() => { isDragging = false; }, 50);
         });

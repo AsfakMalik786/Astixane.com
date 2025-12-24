@@ -682,6 +682,11 @@ footer {
     z-index: 2000;
     font-family: inherit;
 }
+.chat-widget {
+    will-change: transform;
+    transition: transform 0.12s cubic-bezier(.2,.8,.2,1);
+    touch-action: none;
+}
 .chat-toggle {
     width: 56px;
     height: 56px;
@@ -725,6 +730,7 @@ footer {
     visibility: visible;
 }
 .chat-widget.dragging .chat-toggle { cursor: grabbing; }
+.chat-widget.dragging { transition: none; }
 .chat-header {
     padding: 12px 14px;
     font-weight: 600;
